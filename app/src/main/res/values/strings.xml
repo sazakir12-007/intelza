@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Intelza</string>
+    <string name="home_tagline">Check what your class understood in seconds. Students hold up their answer cards and you scan the room.</string>
+
+    <!-- Common -->
+    <string name="back">Back</string>
+    <string name="clear">Clear</string>
+
+    <!-- Camera permission -->
+    <string name="camera_permission_title">Camera access needed</string>
+    <string name="camera_permission_body">Intelza uses the camera to read students\' answer cards. Images are analysed on the phone and never saved or sent anywhere.</string>
+    <string name="camera_permission_allow">Allow camera</string>
+    <string name="camera_permission_settings">Open app settings</string>
+
+    <!-- Test cards -->
+    <string name="test_cards_title">Test cards</string>
+    <string name="test_cards_summary">Check printed cards and see which answer each one shows</string>
+    <string name="test_cards_hint">Point the camera at printed cards. Turn a card so a different letter is on top to change its answer.</string>
+    <string name="test_cards_stats">%1$.0f fps · %2$d ms · %3$d×%4$d</string>
+</resources>

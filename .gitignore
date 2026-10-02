@@ -1,0 +1,31 @@
+# Gradle
+.gradle/
+build/
+/app/build/
+.kotlin/
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+.navigation/
+captures/
+
+# Native build output
+.cxx/
+.externalNativeBuild/
+
+# Local machine configuration
+local.properties
+
+# Signing keys must never be committed
+*.jks
+*.keystore
+keystore.properties
+
+# Build logs
+*.log
+build-log.txt
+
+# OS files
+.DS_Store
+Thumbs.db
