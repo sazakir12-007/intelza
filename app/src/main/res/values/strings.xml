@@ -160,6 +160,7 @@
     <string name="take_photo">Take photo</string>
     <string name="replace_picture">Replace</string>
     <string name="picture_failed">That picture couldn\'t be added. Try another one.</string>
+    <string name="no_camera_app">No camera app found. Choose a picture from the gallery instead.</string>
     <string name="number_of_options">Number of options</string>
     <string name="answer_options">Options</string>
     <string name="answer_options_mark_correct">Options (select the correct one)</string>

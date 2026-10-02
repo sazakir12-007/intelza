@@ -1,6 +1,7 @@
 package com.ht.intelza.ui.questions
 
 import android.Manifest
+import android.content.ActivityNotFoundException
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -86,10 +87,15 @@ fun QuestionEditScreen(onBack: () -> Unit) {
         val uri = captureUri
         if (saved && uri != null) viewModel.importImage(uri)
     }
+    val noCameraApp = stringResource(R.string.no_camera_app)
     fun launchCamera() {
         val uri = viewModel.newCaptureUri()
         captureUri = uri
-        takePhoto.launch(uri)
+        try {
+            takePhoto.launch(uri)
+        } catch (e: ActivityNotFoundException) {
+            scope.launch { snackbar.showSnackbar(noCameraApp) }
+        }
     }
     val cameraPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         if (granted) launchCamera()
