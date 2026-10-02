@@ -1,11 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Intelza</string>
-    <string name="home_tagline">Check what your class understood in seconds. Students hold up their answer cards and you scan the room.</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_classes">Classes</string>
+    <string name="nav_questions">Questions</string>
+    <string name="nav_reports">Reports</string>
 
     <!-- Common -->
     <string name="back">Back</string>
+    <string name="cancel">Cancel</string>
     <string name="clear">Clear</string>
+    <string name="close">Close</string>
+    <string name="create">Create</string>
+    <string name="delete">Delete</string>
+    <string name="duplicate">Duplicate</string>
+    <string name="more_options">More options</string>
+    <string name="move_down">Move down</string>
+    <string name="move_up">Move up</string>
+    <string name="next">Next</string>
+    <string name="ok">OK</string>
+    <string name="remove">Remove</string>
+    <string name="rename">Rename</string>
+    <string name="save">Save</string>
+    <string name="settings">Settings</string>
+    <string name="share">Share</string>
+    <string name="start">Start</string>
+    <string name="print">Print</string>
+
+    <!-- Home -->
+    <string name="home_title">Check what your class understood</string>
+    <string name="home_tagline">Students hold up their answer cards and you scan the whole room in seconds.</string>
+    <string name="getting_started">Getting started</string>
+    <string name="step_add_class">Add a class</string>
+    <string name="step_add_class_hint">Create a class and add your students, or import a list</string>
+    <string name="step_print_cards">Print answer cards</string>
+    <string name="step_print_cards_hint">One card per student, printed on paper or card</string>
+    <string name="step_add_questions">Prepare questions</string>
+    <string name="step_add_questions_hint">Add topics and questions, or ask quick questions on the spot</string>
+    <string name="recent_evaluations">Recent evaluations</string>
+    <string name="answer_cards">Answer cards</string>
+    <string name="session_progress">%1$s · %2$d of %3$d asked · %4$s</string>
 
     <!-- Camera permission -->
     <string name="camera_permission_title">Camera access needed</string>
@@ -18,4 +54,300 @@
     <string name="test_cards_summary">Check printed cards and see which answer each one shows</string>
     <string name="test_cards_hint">Point the camera at printed cards. Turn a card so a different letter is on top to change its answer.</string>
     <string name="test_cards_stats">%1$.0f fps · %2$d ms · %3$d×%4$d</string>
+
+    <!-- Classes -->
+    <string name="new_class">New class</string>
+    <string name="class_name_hint">Class name, e.g. Grade 3 – B</string>
+    <string name="rename_class">Rename class</string>
+    <string name="archive">Archive</string>
+    <string name="unarchive">Unarchive</string>
+    <string name="archived">Archived</string>
+    <string name="delete_class">Delete class</string>
+    <string name="delete_class_title">Delete this class?</string>
+    <string name="delete_class_message">This deletes the class, its students and all their results. It can\'t be undone. To keep the results, archive the class instead.</string>
+    <string name="no_classes_title">No classes yet</string>
+    <string name="no_classes_message">Create a class, then add your students so each one gets an answer card.</string>
+    <string name="last_evaluated">Last evaluated %1$s</string>
+    <string name="add_student">Add student</string>
+    <string name="edit_student">Edit student</string>
+    <string name="student_name">Name</string>
+    <string name="roll_number_optional">Roll number (optional)</string>
+    <string name="roll_number_value">Roll %1$s</string>
+    <string name="card_number">Card number</string>
+    <string name="card_number_value">Card %1$d</string>
+    <string name="card_taken">Card already used by %1$s</string>
+    <string name="card_invalid">Use a number from 1 to %1$d</string>
+    <string name="no_free_card">All card numbers are in use</string>
+    <string name="remove_from_class">Remove from class</string>
+    <string name="remove_student_title">Remove %1$s?</string>
+    <string name="remove_student_message">Their card number becomes free. Past results stay in the reports.</string>
+    <string name="no_students_title">No students yet</string>
+    <string name="no_students_message">Add students one by one, or import a list from a spreadsheet saved as CSV.</string>
+    <string name="import_students">Import students</string>
+    <string name="import_action">Import</string>
+    <string name="import_explanation">Students keep the card number from the file if it\'s free; others get the next free number.</string>
+    <string name="import_nothing_found">No students found in that file. Save the list as CSV with names in the first column.</string>
+    <string name="import_skipped">%1$d skipped because no card numbers were free.</string>
+    <string name="start_evaluation">Start evaluation</string>
+    <string name="class_report">Class report</string>
+    <string name="student_report">Student report</string>
+    <string name="students">Students</string>
+
+    <!-- Cards -->
+    <string name="print_cards">Print cards</string>
+    <string name="cards_for">Cards for</string>
+    <string name="numbered_set">Numbered set</string>
+    <string name="numbered_set_hint">A plain numbered set without names can be reused by any class: card numbers match each class\'s list.</string>
+    <string name="from_card">From card</string>
+    <string name="to_card">To card</string>
+    <string name="print_student_names">Print student names</string>
+    <string name="print_student_names_hint">Names help students find their own card. Leave off to reuse cards across classes.</string>
+    <string name="card_size">Card size</string>
+    <string name="card_size_standard">2 per page</string>
+    <string name="card_size_large">1 per page (large)</string>
+    <string name="paper_size">Paper</string>
+    <string name="paper_a4">A4</string>
+    <string name="paper_letter">Letter</string>
+    <string name="cards_preview">Preview of the first page</string>
+    <string name="share_pdf">Share PDF</string>
+    <string name="share_cards">Share answer cards</string>
+    <string name="no_cards_to_print">No cards to print. Add students to the class or choose a numbered set.</string>
+    <string name="printing_tips">Tips: print in black on white, ideally on thick matte paper or card so it doesn\'t bend or shine. Don\'t scale the page down. Use large cards for big rooms.</string>
+    <string name="cards_file_name_class">Intelza cards - %1$s</string>
+    <string name="cards_file_name_set">Intelza cards %1$d-%2$d</string>
+
+    <!-- Question bank -->
+    <string name="question_bank">Question bank</string>
+    <string name="new_subject">New subject</string>
+    <string name="subject_name">Subject name</string>
+    <string name="rename_subject">Rename subject</string>
+    <string name="delete_subject_title">Delete %1$s?</string>
+    <string name="delete_subject_message">All its topics and questions are deleted. Past results stay in the reports.</string>
+    <string name="no_subjects_title">No subjects</string>
+    <string name="no_subjects_message">Add a subject to start building your question bank.</string>
+    <string name="new_topic">New topic</string>
+    <string name="topic_name">Topic name</string>
+    <string name="grade_optional">Grade (optional)</string>
+    <string name="grade_value">Grade %1$s</string>
+    <string name="edit_topic">Edit topic</string>
+    <string name="delete_topic">Delete topic</string>
+    <string name="delete_topic_title">Delete %1$s?</string>
+    <string name="delete_topic_message">Its questions are deleted. Past results stay in the reports.</string>
+    <string name="no_topics_title">No topics yet</string>
+    <string name="no_topics_message">Add a topic for each lesson or unit you teach, then add a few questions to check understanding.</string>
+    <string name="topic_report">Topic report</string>
+    <string name="evaluate">Evaluate</string>
+    <string name="add_question">Add question</string>
+    <string name="no_questions_title">No questions yet</string>
+    <string name="no_questions_message">Add 3–8 short questions about what you taught.</string>
+    <string name="picture_question">Picture question</string>
+    <string name="has_picture">Has a picture</string>
+    <string name="delete_question_title">Delete this question?</string>
+    <string name="delete_question_message">Past results that used it are kept.</string>
+    <string name="new_question">New question</string>
+    <string name="edit_question">Edit question</string>
+    <string name="type_multiple_choice">Multiple choice</string>
+    <string name="type_true_false">True/False</string>
+    <string name="type_poll">Poll</string>
+    <string name="type_multiple_choice_hint">Students choose one of 2–4 answers. Mark the correct one.</string>
+    <string name="type_true_false_hint">Card A means True, card B means False.</string>
+    <string name="type_poll_hint">No right answer, e.g. \"How well did you understand? A = fully, B = partly, C = not yet\". Polls are never scored.</string>
+    <string name="question_text">Question</string>
+    <string name="question_text_optional">Question (optional)</string>
+    <string name="picture_optional">Picture (optional)</string>
+    <string name="question_picture">Question picture</string>
+    <string name="choose_picture">Choose</string>
+    <string name="take_photo">Take photo</string>
+    <string name="replace_picture">Replace</string>
+    <string name="picture_failed">That picture couldn\'t be added. Try another one.</string>
+    <string name="number_of_options">Number of options</string>
+    <string name="answer_options">Options</string>
+    <string name="answer_options_mark_correct">Options (select the correct one)</string>
+    <string name="option_label_optional">Option %1$s (optional)</string>
+    <string name="choose_correct_answer">Select the correct answer</string>
+    <string name="save_and_add_another">Save and add next</string>
+    <string name="question_saved">Question saved</string>
+    <string name="answer_true">True</string>
+    <string name="answer_false">False</string>
+    <string name="answer_value">Answer %1$s</string>
+    <string name="option_count">%1$d options</string>
+    <string name="no_correct_answer_set">No correct answer set</string>
+
+    <!-- Starting a session -->
+    <string name="step_choose_class">1. Choose a class</string>
+    <string name="step_choose_questions">2. Choose what to ask</string>
+    <string name="quick_session">Quick questions</string>
+    <string name="quick_session_hint">Nothing prepared: ask questions out loud and scan</string>
+    <string name="no_ready_classes_title">No class ready</string>
+    <string name="no_ready_classes_message">Add a class with students first.</string>
+    <string name="no_topics_for_session">Topics with questions appear here. Add them in the Questions tab.</string>
+
+    <!-- Running a session -->
+    <string name="present">Present</string>
+    <string name="absent">Absent</string>
+    <string name="attendance">Attendance</string>
+    <string name="attendance_hint">Absent students are left out of the results. Anyone who answers is marked present automatically.</string>
+    <string name="question_x_of_y">Question %1$d of %2$d</string>
+    <string name="question_was_skipped">This question was skipped.</string>
+    <string name="scan_answers">Scan answers</string>
+    <string name="skip_question">Skip question</string>
+    <string name="scan_again">Scan again</string>
+    <string name="done_scanning">Done</string>
+    <string name="answered_count">%1$d of %2$d answered</string>
+    <string name="still_waiting_for">Still waiting for (tap to enter by hand):</string>
+    <string name="everyone_answered">Everyone has answered</string>
+    <string name="show_names">Show names and answers</string>
+    <string name="hide_names">Hide names and answers</string>
+    <string name="got_it_right">got it right</string>
+    <string name="poll_results">Poll results</string>
+    <string name="correct_answer">Correct answer</string>
+    <string name="which_answer_correct">Which answer was correct?</string>
+    <string name="no_correct_answer_poll">No correct answer (poll)</string>
+    <string name="who_chose_what">Who chose what</string>
+    <string name="tap_to_change_answer">Tap a name to change their answer.</string>
+    <string name="no_answer">No answer</string>
+    <string name="reveal_results">Reveal results</string>
+    <string name="hide_results">Hide results</string>
+    <string name="next_question">Next question</string>
+    <string name="continue_label">Continue</string>
+    <string name="end_of_prepared_questions">That was the last prepared question.</string>
+    <string name="ask_quick_question">Ask a quick question</string>
+    <string name="ask_quick_question_hint">Say the question out loud or write it on the board, then scan. You can mark the correct answer afterwards.</string>
+    <string name="quick_question_short">Quick</string>
+    <string name="finish_evaluation">Finish evaluation</string>
+    <string name="delete_evaluation">Delete evaluation</string>
+    <string name="delete_evaluation_title">Delete this evaluation?</string>
+    <string name="delete_evaluation_message">All answers recorded in it are deleted. This can\'t be undone.</string>
+    <string name="present_on_screen">Presenter view</string>
+    <string name="exit_presenter">Exit presenter view</string>
+    <string name="showing_on_display">Showing on %1$s</string>
+    <string name="presenter_get_ready">Get your answer cards ready!</string>
+    <string name="presenter_answered">%1$d / %2$d</string>
+
+    <!-- Reports -->
+    <string name="no_reports_title">No results yet</string>
+    <string name="no_reports_message">Results appear here after your first evaluation.</string>
+    <string name="in_progress">In progress</string>
+    <string name="completed">Completed</string>
+    <string name="class_average">Class average</string>
+    <string name="students_present">Present</string>
+    <string name="questions_asked">Questions asked</string>
+    <string name="questions">Questions</string>
+    <string name="needs_help_heading">Needs help (below %1$d%%)</string>
+    <string name="reteach_heading">Re-teach (below %1$d%% correct)</string>
+    <string name="nobody_needs_help">Nobody is below the threshold. 🎉</string>
+    <string name="nothing_to_reteach">Every question was answered well.</string>
+    <string name="correct_of">%1$d of %2$d correct</string>
+    <string name="absent_list">Absent: %1$s</string>
+    <string name="evaluation_in_progress">This evaluation is still in progress.</string>
+    <string name="continue_evaluation">Continue evaluation</string>
+    <string name="share_report">Share report</string>
+    <string name="share_pdf_report">Share as PDF</string>
+    <string name="share_csv_report">Share as spreadsheet (CSV)</string>
+    <string name="share_gradebook">Share gradebook (CSV)</string>
+    <string name="export_failed">Couldn\'t create the file. Please try again.</string>
+    <string name="overall_average">Overall average</string>
+    <string name="evaluations_attended">Evaluations attended</string>
+    <string name="by_subject">By subject</string>
+    <string name="history">History</string>
+    <string name="no_student_history_title">No results yet</string>
+    <string name="no_student_history_message">This student hasn\'t been part of an evaluation yet.</string>
+    <string name="evaluations">Evaluations</string>
+    <string name="no_topic_reports_title">Not evaluated yet</string>
+    <string name="no_topic_reports_message">Results for this topic appear after you use it in an evaluation.</string>
+    <string name="no_class_reports_title">No evaluations yet</string>
+    <string name="no_class_reports_message">Start an evaluation with this class to see its progress here.</string>
+    <string name="students_lowest_first">Students (lowest average first)</string>
+    <string name="left_class">Left the class</string>
+    <string name="class_report_file_name">%1$s - class report</string>
+    <string name="csv_card">Card</string>
+    <string name="csv_roll">Roll no.</string>
+    <string name="csv_name">Name</string>
+    <string name="csv_attendance">Attendance</string>
+    <string name="csv_correct">Correct</string>
+    <string name="csv_score">Score</string>
+    <string name="csv_average">Average</string>
+    <string name="csv_question">Question</string>
+    <string name="csv_text">Text</string>
+    <string name="csv_type">Type</string>
+    <string name="csv_answer">Answer</string>
+    <string name="csv_percent_correct">% correct</string>
+
+    <!-- Settings -->
+    <string name="settings_results">Results</string>
+    <string name="needs_help_threshold">Needs help below</string>
+    <string name="needs_help_threshold_hint">Students scoring below this are flagged in reports.</string>
+    <string name="reteach_threshold">Re-teach below</string>
+    <string name="reteach_threshold_hint">Questions fewer students than this got right are flagged to re-teach.</string>
+    <string name="settings_scanning">Scanning</string>
+    <string name="scan_sound">Beep when a card is recorded</string>
+    <string name="scan_vibration">Vibrate when a card is recorded</string>
+    <string name="show_names_while_scanning">Show names and answers while scanning</string>
+    <string name="show_names_while_scanning_hint">Off by default so it\'s safe to show the screen on a TV</string>
+    <string name="settings_cards">Answer cards</string>
+    <string name="print_numbered_cards">Print a numbered set</string>
+    <string name="print_numbered_cards_hint">Cards without names that any class can use</string>
+    <string name="settings_data">Data</string>
+    <string name="backup">Back up</string>
+    <string name="backup_hint">Save all classes, questions and results in one file</string>
+    <string name="backup_choice_message">Save the backup file on this phone, or share it, e.g. to your own Google Drive or another phone.</string>
+    <string name="save_to_device">Save to phone</string>
+    <string name="share_backup">Share backup</string>
+    <string name="backup_saved">Backup saved</string>
+    <string name="backup_failed">Something went wrong. Please try again.</string>
+    <string name="backup_file_name">Intelza backup %1$s</string>
+    <string name="restore">Restore</string>
+    <string name="restore_hint">Replace everything on this phone with a backup file</string>
+    <string name="restore_confirm_title">Restore from backup?</string>
+    <string name="restore_confirm_message">Everything currently in Intelza on this phone is replaced by the backup. The app restarts afterwards.</string>
+    <string name="restore_invalid">That file isn\'t a backup from this version of Intelza.</string>
+    <string name="settings_about">About</string>
+    <string name="privacy">Privacy</string>
+    <string name="privacy_summary">Student data stays on this phone</string>
+    <string name="privacy_details">Intelza has no accounts, no ads and no tracking, and it doesn\'t have permission to use the internet.\n\nClasses, students, questions and results are stored only on this phone. They leave it only when you share a report, a card PDF or a backup file yourself.\n\nThe camera is used only while scanning answer cards. Images are analysed on the phone and never saved.</string>
+    <string name="open_source_licences">Open-source licences</string>
+    <string name="version_value">Version %1$s</string>
+    <string name="apriltag_licence">AprilTag 3\nhttps://github.com/AprilRobotics/apriltag\n\nBSD 2-Clause License\n\nCopyright (C) 2013-2016, The Regents of The University of Michigan. All rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\n1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\n2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n\nThe views and conclusions contained in the software and documentation are those of the authors and should not be interpreted as representing official policies, either expressed or implied, of the Regents of The University of Michigan.</string>
+
+    <!-- Plurals -->
+    <plurals name="student_count">
+        <item quantity="one">%d student</item>
+        <item quantity="other">%d students</item>
+    </plurals>
+    <plurals name="topic_count">
+        <item quantity="one">%d topic</item>
+        <item quantity="other">%d topics</item>
+    </plurals>
+    <plurals name="question_count">
+        <item quantity="one">%d question</item>
+        <item quantity="other">%d questions</item>
+    </plurals>
+    <plurals name="evaluation_count">
+        <item quantity="one">%d evaluation</item>
+        <item quantity="other">%d evaluations</item>
+    </plurals>
+    <plurals name="times_asked">
+        <item quantity="one">Asked once</item>
+        <item quantity="other">Asked %d times</item>
+    </plurals>
+    <plurals name="options_short">
+        <item quantity="one">%d option</item>
+        <item quantity="other">%d options</item>
+    </plurals>
+    <plurals name="import_found">
+        <item quantity="one">Found %d student</item>
+        <item quantity="other">Found %d students</item>
+    </plurals>
+    <plurals name="import_added">
+        <item quantity="one">Added %d student.</item>
+        <item quantity="other">Added %d students.</item>
+    </plurals>
+    <plurals name="card_count">
+        <item quantity="one">%d card</item>
+        <item quantity="other">%d cards</item>
+    </plurals>
+    <plurals name="page_count">
+        <item quantity="one">%d page</item>
+        <item quantity="other">%d pages</item>
+    </plurals>
 </resources>

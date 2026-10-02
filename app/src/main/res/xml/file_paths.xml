@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Reports, card PDFs and backups the teacher shares. -->
+    <cache-path name="exports" path="exports/" />
+    <!-- Photos taken for question pictures. -->
+    <cache-path name="camera" path="camera/" />
+</paths>
