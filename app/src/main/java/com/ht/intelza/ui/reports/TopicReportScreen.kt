@@ -17,7 +17,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -44,6 +43,7 @@ import com.ht.intelza.ui.common.appViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import com.ht.intelza.ui.common.AppTopBar
 
 class TopicReportViewModel(
     questions: QuestionRepository,
@@ -74,7 +74,7 @@ fun TopicReportScreen(onBack: () -> Unit, onOpenSession: (Long) -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            AppTopBar(
                 title = {
                     Column {
                         Text(topic?.topic?.name.orEmpty(), maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -95,7 +95,7 @@ fun TopicReportScreen(onBack: () -> Unit, onOpenSession: (Long) -> Unit) {
     ) { padding ->
         val sessionList = sessions ?: return@Scaffold
         val questionList = stats ?: return@Scaffold
-        LazyColumn(Modifier.padding(padding), contentPadding = PaddingValues(bottom = 24.dp)) {
+        LazyColumn(Modifier.padding(padding), contentPadding = PaddingValues(bottom = 16.dp)) {
             if (sessionList.isEmpty()) {
                 item {
                     EmptyState(
@@ -117,9 +117,9 @@ fun TopicReportScreen(onBack: () -> Unit, onOpenSession: (Long) -> Unit) {
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 10.dp),
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     Column(Modifier.weight(1f)) {
                         Text(

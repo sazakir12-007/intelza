@@ -69,6 +69,7 @@ class ReportExporter(
         val report = reports.getSessionReport(sessionId)
         val current = settings.current()
         val writer = PdfReportWriter(footer = "Intelza · ${overview.className} · ${formatDate(overview.startedAt)}")
+        writer.brand("${string(R.string.app_wordmark)}  ·  ${string(R.string.app_tagline)}")
         writer.title(sessionTitle(overview))
         writer.subtitle(
             listOfNotNull(

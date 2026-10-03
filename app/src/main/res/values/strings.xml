@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Intelza</string>
+    <string name="app_wordmark" translatable="false">INTELZA</string>
+    <string name="app_tagline">Understanding Beyond Answers</string>
 
     <!-- Navigation -->
     <string name="nav_home">Home</string>
@@ -309,6 +311,41 @@
     <string name="open_source_licences">Open-source licences</string>
     <string name="version_value">Version %1$s</string>
     <string name="apriltag_licence">AprilTag 3\nhttps://github.com/AprilRobotics/apriltag\n\nBSD 2-Clause License\n\nCopyright (C) 2013-2016, The Regents of The University of Michigan. All rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\n1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\n2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n\nThe views and conclusions contained in the software and documentation are those of the authors and should not be interpreted as representing official policies, either expressed or implied, of the Regents of The University of Michigan.</string>
+
+    <!-- Navigation menu -->
+    <string name="open_menu">Open menu</string>
+    <string name="tools">Tools</string>
+    <string name="expand">Expand</string>
+    <string name="collapse">Collapse</string>
+    <string name="drawer_continue">Continue: %1$s · %2$s</string>
+    <string name="drawer_class_report">%1$s report</string>
+    <string name="drawer_topic_with_grade">%1$s · Gr %2$s</string>
+
+    <!-- Appearance -->
+    <string name="settings_appearance">Appearance</string>
+    <string name="theme">Theme</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="accent_colour">Colour</string>
+    <string name="palette_indigo">Indigo</string>
+    <string name="palette_teal">Teal</string>
+    <string name="palette_purple">Purple</string>
+    <string name="palette_orange">Orange</string>
+    <string name="palette_wallpaper">Wallpaper</string>
+
+    <!-- Sample data -->
+    <string name="settings_sample_data">Sample data</string>
+    <string name="sample_data_add">Add sample classes and questions</string>
+    <string name="sample_data_add_hint">Grade 2 and Grade 3 test classes with 10 students each, and 160 multiple-choice questions for all four subjects</string>
+    <string name="sample_data_remove">Remove sample data</string>
+    <string name="sample_data_remove_hint">Deletes the test classes, their results and the sample topics</string>
+    <string name="sample_data_remove_title">Remove sample data?</string>
+    <string name="sample_data_remove_message">The two test classes, any evaluations done with them, and the sample topics are deleted. Your own classes and questions are kept.</string>
+    <string name="sample_data_added">Added %1$d classes, %2$d students, %3$d topics and %4$d questions.</string>
+    <string name="sample_data_already">The sample data is already there.</string>
+    <string name="sample_data_removed">Sample data removed.</string>
+    <string name="sample_data_none">There was no sample data to remove.</string>
 
     <!-- Plurals -->
     <plurals name="student_count">

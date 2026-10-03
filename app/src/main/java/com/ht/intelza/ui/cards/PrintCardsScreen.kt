@@ -33,7 +33,6 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -51,7 +51,9 @@ import com.ht.intelza.R
 import com.ht.intelza.data.CardSize
 import com.ht.intelza.data.PaperSize
 import com.ht.intelza.domain.CardNumbers
+import com.ht.intelza.export.Sharing
 import com.ht.intelza.ui.common.appViewModel
+import com.ht.intelza.ui.common.AppTopBar
 
 @Composable
 fun PrintCardsScreen(onBack: () -> Unit) {
@@ -60,10 +62,13 @@ fun PrintCardsScreen(onBack: () -> Unit) {
     val preview by viewModel.preview.collectAsStateWithLifecycle()
     val className by viewModel.className.collectAsStateWithLifecycle()
     val error by viewModel.error.collectAsStateWithLifecycle()
+    // Printing and sharing must start from this screen (an activity), not the app context.
+    val context = LocalContext.current
+    val shareTitle = stringResource(R.string.share_cards)
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            AppTopBar(
                 title = { Text(stringResource(R.string.print_cards)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
@@ -78,11 +83,13 @@ fun PrintCardsScreen(onBack: () -> Unit) {
                     Modifier
                         .fillMaxWidth()
                         .navigationBarsPadding()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        .padding(12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     OutlinedButton(
-                        onClick = viewModel::share,
+                        onClick = {
+                            preview?.let { Sharing.share(context, it.file, "application/pdf", shareTitle) }
+                        },
                         enabled = preview != null,
                         modifier = Modifier.weight(1f),
                     ) {
@@ -90,7 +97,9 @@ fun PrintCardsScreen(onBack: () -> Unit) {
                         Text(stringResource(R.string.share_pdf), Modifier.padding(start = 8.dp))
                     }
                     Button(
-                        onClick = viewModel::print,
+                        onClick = {
+                            preview?.let { Sharing.printPdf(context, it.file, it.file.nameWithoutExtension) }
+                        },
                         enabled = preview != null,
                         modifier = Modifier.weight(1f),
                     ) {
@@ -107,8 +116,8 @@ fun PrintCardsScreen(onBack: () -> Unit) {
                 .padding(padding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+                .padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             if (className != null) {
                 OptionLabel(stringResource(R.string.cards_for))
@@ -147,7 +156,7 @@ fun PrintCardsScreen(onBack: () -> Unit) {
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     NumberField(
                         label = stringResource(R.string.from_card),
                         value = current.rangeFrom,

@@ -1,5 +1,7 @@
 # Intelza
 
+**Understanding Beyond Answers**
+
 Intelza is an Android app that lets primary school teachers check how well the class
 understood a topic, right after teaching it.
 
@@ -8,7 +10,8 @@ is on top chooses an answer. The teacher sweeps the phone camera across the room
 app reads every card at once, using [AprilTag](https://april.eecs.umich.edu/software/apriltag)
 markers, then shows who understood and who needs help.
 
-See [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md) for the full version 1.0 specification.
+- [Teacher's guide](docs/USER_GUIDE.md): how to set up a class, print cards and run an evaluation
+- [Requirements](docs/REQUIREMENTS.md): the full version 1.0 specification
 
 ## Privacy
 
@@ -46,14 +49,44 @@ Run the on-device tests (detector checks, needs a connected phone or emulator):
 
 Every push to `main` is built by GitHub Actions; the debug APK is attached to each run.
 
+## Release builds
+
+Release builds are shrunk with R8 and need your own signing key, which must never be
+committed.
+
+1. Create a key once, e.g. in Android Studio: **Build → Generate Signed App Bundle or
+   APK → Create new…**. Keep the `.jks` file and its passwords safe: every future update
+   of the app must be signed with the same key.
+2. Create `keystore.properties` in the project root (it is ignored by Git):
+
+   ```properties
+   storeFile=../keys/intelza-release.jks
+   storePassword=…
+   keyAlias=intelza
+   keyPassword=…
+   ```
+
+   `storeFile` is relative to the project root.
+3. Build:
+
+   ```bash
+   ./gradlew assembleRelease
+   ```
+
+   The signed APK is written to `app/build/outputs/apk/release/`. Without
+   `keystore.properties` the release APK is built unsigned.
+
 ## Project layout
 
 | Path | Contents |
 |---|---|
 | `app/src/main/cpp/` | JNI bridge (`intelza_jni.c`) and the vendored AprilTag 3 detector |
 | `app/src/main/java/com/ht/intelza/scan/` | Camera analysis, card detection and answer decoding |
+| `app/src/main/java/com/ht/intelza/data/` | Room database, repositories, backup |
+| `app/src/main/java/com/ht/intelza/domain/` | Scoring and other app rules (unit tested) |
 | `app/src/main/java/com/ht/intelza/ui/` | Jetpack Compose screens |
-| `docs/` | Requirements and design notes |
+| `app/src/main/java/com/ht/intelza/cards/`, `export/` | Card PDFs, report PDFs and CSVs, sharing |
+| `docs/` | Requirements and the teacher's guide |
 
 ## How answers are read
 

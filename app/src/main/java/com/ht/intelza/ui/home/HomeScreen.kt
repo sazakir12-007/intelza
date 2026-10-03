@@ -27,13 +27,11 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -51,16 +49,18 @@ import com.ht.intelza.data.QuestionRepository
 import com.ht.intelza.data.ReportRepository
 import com.ht.intelza.data.SettingsRepository
 import com.ht.intelza.data.db.SessionOverview
+import com.ht.intelza.ui.common.BrandLockup
 import com.ht.intelza.ui.common.SectionHeader
 import com.ht.intelza.ui.common.appViewModel
 import com.ht.intelza.ui.common.formatDate
-import com.ht.intelza.ui.navigation.AppBottomBar
-import com.ht.intelza.ui.navigation.TopLevelDestination
 import com.ht.intelza.ui.reports.SessionRow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import com.ht.intelza.ui.common.AppTopBar
+import com.ht.intelza.ui.common.DrawerMenuButton
+import com.ht.intelza.ui.common.CompactListItem
 
 data class HomeState(
     val inProgress: List<SessionOverview>,
@@ -104,15 +104,17 @@ fun HomeScreen(
     onPrintCards: () -> Unit,
     onTestCards: () -> Unit,
     onSettings: () -> Unit,
-    onNavigate: (TopLevelDestination) -> Unit,
+    onOpenClasses: () -> Unit,
+    onOpenQuestions: () -> Unit,
 ) {
     val viewModel = appViewModel { c, _ -> HomeViewModel(c.reports, c.classes, c.questions, c.settings) }
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.app_name), fontWeight = FontWeight.Bold) },
+            AppTopBar(
+                title = { BrandLockup() },
+                navigationIcon = { DrawerMenuButton() },
                 actions = {
                     IconButton(onClick = onSettings) {
                         Icon(Icons.Outlined.Settings, stringResource(R.string.settings))
@@ -120,21 +122,20 @@ fun HomeScreen(
                 },
             )
         },
-        bottomBar = { AppBottomBar(TopLevelDestination.HOME, onNavigate) },
     ) { padding ->
         val home = state ?: return@Scaffold
         LazyColumn(
             Modifier.padding(padding),
-            contentPadding = PaddingValues(bottom = 24.dp),
+            contentPadding = PaddingValues(bottom = 16.dp),
         ) {
             item {
                 Card(
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(12.dp),
                 ) {
-                    Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(
                             stringResource(R.string.home_title),
                             style = MaterialTheme.typography.headlineSmall,
@@ -159,9 +160,9 @@ fun HomeScreen(
                     GettingStarted(
                         hasClasses = home.hasClasses,
                         hasQuestions = home.hasQuestions,
-                        onClasses = { onNavigate(TopLevelDestination.CLASSES) },
+                        onClasses = onOpenClasses,
                         onPrintCards = onPrintCards,
-                        onQuestions = { onNavigate(TopLevelDestination.QUESTIONS) },
+                        onQuestions = onOpenQuestions,
                     )
                 }
             }
@@ -169,7 +170,7 @@ fun HomeScreen(
             if (home.inProgress.isNotEmpty()) {
                 item { SectionHeader(stringResource(R.string.continue_evaluation)) }
                 items(home.inProgress, key = { "p-${it.id}" }) { session ->
-                    ListItem(
+                    CompactListItem(
                         modifier = Modifier.clickable { onContinueSession(session.id) },
                         leadingContent = { Icon(Icons.Outlined.PlayCircle, null, tint = MaterialTheme.colorScheme.tertiary) },
                         headlineContent = { Text(session.title.ifEmpty { stringResource(R.string.quick_session) }) },
@@ -203,8 +204,8 @@ fun HomeScreen(
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        .padding(horizontal = 12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     ToolCard(Icons.Outlined.Print, stringResource(R.string.print_cards), onPrintCards, Modifier.weight(1f))
                     ToolCard(Icons.Outlined.QrCodeScanner, stringResource(R.string.test_cards_title), onTestCards, Modifier.weight(1f))
@@ -225,13 +226,13 @@ private fun GettingStarted(
     OutlinedCard(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 12.dp),
     ) {
         Column(Modifier.padding(vertical = 8.dp)) {
             Text(
                 stringResource(R.string.getting_started),
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
             )
             Step(1, stringResource(R.string.step_add_class), stringResource(R.string.step_add_class_hint), hasClasses, onClasses)
             Step(2, stringResource(R.string.step_print_cards), stringResource(R.string.step_print_cards_hint), false, onPrintCards)
@@ -242,7 +243,7 @@ private fun GettingStarted(
 
 @Composable
 private fun Step(number: Int, title: String, hint: String, done: Boolean, onClick: () -> Unit) {
-    ListItem(
+    CompactListItem(
         modifier = Modifier.clickable(onClick = onClick),
         leadingContent = {
             Surface(
@@ -275,7 +276,7 @@ private fun ToolCard(
         Column(
             Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Icon(icon, null, tint = MaterialTheme.colorScheme.primary)

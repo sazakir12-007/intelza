@@ -36,13 +36,13 @@ fun EmptyState(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 32.dp, vertical = 48.dp),
+            .padding(horizontal = 24.dp, vertical = 28.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Box(
             Modifier
-                .size(72.dp)
+                .size(56.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.secondaryContainer),
             contentAlignment = Alignment.Center,
@@ -51,7 +51,7 @@ fun EmptyState(
                 icon,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                modifier = Modifier.size(36.dp),
+                modifier = Modifier.size(28.dp),
             )
         }
         Text(title, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
@@ -67,11 +67,11 @@ fun EmptyState(
 
 /** Rounded badge showing a student's card number. */
 @Composable
-fun CardNumberBadge(number: Int?, modifier: Modifier = Modifier, size: Dp = 40.dp) {
+fun CardNumberBadge(number: Int?, modifier: Modifier = Modifier, size: Dp = 34.dp) {
     Box(
         modifier
             .size(size)
-            .clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(8.dp))
             .background(MaterialTheme.colorScheme.primaryContainer),
         contentAlignment = Alignment.Center,
     ) {
@@ -79,7 +79,7 @@ fun CardNumberBadge(number: Int?, modifier: Modifier = Modifier, size: Dp = 40.d
             number?.toString() ?: "–",
             color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontWeight = FontWeight.Bold,
-            fontSize = if ((number ?: 0) >= 100) 13.sp else 16.sp,
+            fontSize = if ((number ?: 0) >= 100) 12.sp else 14.sp,
         )
     }
 }
@@ -90,7 +90,7 @@ fun LetterTile(
     letter: String,
     color: Color,
     modifier: Modifier = Modifier,
-    size: Dp = 32.dp,
+    size: Dp = 28.dp,
 ) {
     Box(
         modifier
@@ -110,6 +110,6 @@ fun SectionHeader(text: String, modifier: Modifier = Modifier) {
         text,
         style = MaterialTheme.typography.titleSmall,
         color = MaterialTheme.colorScheme.primary,
-        modifier = modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 8.dp),
+        modifier = modifier.padding(start = 12.dp, end = 12.dp, top = 14.dp, bottom = 4.dp),
     )
 }

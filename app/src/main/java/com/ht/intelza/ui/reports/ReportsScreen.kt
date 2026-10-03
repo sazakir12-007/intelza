@@ -11,11 +11,9 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -33,11 +31,12 @@ import com.ht.intelza.ui.common.EmptyState
 import com.ht.intelza.ui.common.SectionHeader
 import com.ht.intelza.ui.common.appViewModel
 import com.ht.intelza.ui.common.formatDate
-import com.ht.intelza.ui.navigation.AppBottomBar
-import com.ht.intelza.ui.navigation.TopLevelDestination
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import com.ht.intelza.ui.common.AppTopBar
+import com.ht.intelza.ui.common.DrawerMenuButton
+import com.ht.intelza.ui.common.CompactListItem
 
 class ReportsViewModel(reports: ReportRepository, settings: SettingsRepository) : ViewModel() {
     val sessions: StateFlow<List<SessionOverview>?> = reports.observeSessions()
@@ -50,7 +49,6 @@ class ReportsViewModel(reports: ReportRepository, settings: SettingsRepository) 
 fun ReportsScreen(
     onOpenSession: (SessionOverview) -> Unit,
     onSettings: () -> Unit,
-    onNavigate: (TopLevelDestination) -> Unit,
 ) {
     val viewModel = appViewModel { c, _ -> ReportsViewModel(c.reports, c.settings) }
     val sessions by viewModel.sessions.collectAsStateWithLifecycle()
@@ -58,8 +56,9 @@ fun ReportsScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            AppTopBar(
                 title = { Text(stringResource(R.string.nav_reports)) },
+                navigationIcon = { DrawerMenuButton() },
                 actions = {
                     IconButton(onClick = onSettings) {
                         Icon(Icons.Outlined.Settings, stringResource(R.string.settings))
@@ -67,12 +66,11 @@ fun ReportsScreen(
                 },
             )
         },
-        bottomBar = { AppBottomBar(TopLevelDestination.REPORTS, onNavigate) },
     ) { padding ->
         val list = sessions ?: return@Scaffold
         val inProgress = list.filter { it.finishedAt == null }
         val finished = list.filter { it.finishedAt != null }
-        LazyColumn(Modifier.padding(padding), contentPadding = PaddingValues(bottom = 24.dp)) {
+        LazyColumn(Modifier.padding(padding), contentPadding = PaddingValues(bottom = 16.dp)) {
             if (list.isEmpty()) {
                 item {
                     EmptyState(
@@ -102,7 +100,7 @@ fun ReportsScreen(
 
 @Composable
 fun SessionRow(session: SessionOverview, settings: AppSettings, onClick: () -> Unit) {
-    ListItem(
+    CompactListItem(
         modifier = Modifier.clickable(onClick = onClick),
         headlineContent = { Text(session.title.ifEmpty { stringResource(R.string.quick_session) }) },
         supportingContent = {

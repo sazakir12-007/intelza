@@ -25,7 +25,14 @@ enum class CardSize(val cardsPerPage: Int) {
     LARGE(1),
 }
 
+enum class ThemeMode { SYSTEM, LIGHT, DARK }
+
+/** Accent colours the teacher can choose; DYNAMIC follows the wallpaper (Android 12+). */
+enum class ThemePalette { INDIGO, TEAL, PURPLE, ORANGE, DYNAMIC }
+
 data class AppSettings(
+    val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    val themePalette: ThemePalette = ThemePalette.INDIGO,
     val needsHelpThreshold: Int = 50,
     val reteachThreshold: Int = 60,
     val paperSize: PaperSize = PaperSize.A4,
@@ -48,6 +55,8 @@ class SettingsRepository(context: Context) {
     suspend fun update(transform: (AppSettings) -> AppSettings) {
         store.edit { prefs ->
             val updated = transform(prefs.toSettings())
+            prefs[THEME_MODE] = updated.themeMode.name
+            prefs[THEME_PALETTE] = updated.themePalette.name
             prefs[NEEDS_HELP] = updated.needsHelpThreshold.coerceIn(0, 100)
             prefs[RETEACH] = updated.reteachThreshold.coerceIn(0, 100)
             prefs[PAPER] = updated.paperSize.name
@@ -62,6 +71,9 @@ class SettingsRepository(context: Context) {
     private fun Preferences.toSettings(): AppSettings {
         val defaults = AppSettings()
         return AppSettings(
+            themeMode = this[THEME_MODE]?.let { runCatching { ThemeMode.valueOf(it) }.getOrNull() } ?: defaults.themeMode,
+            themePalette = this[THEME_PALETTE]?.let { runCatching { ThemePalette.valueOf(it) }.getOrNull() }
+                ?: defaults.themePalette,
             needsHelpThreshold = this[NEEDS_HELP] ?: defaults.needsHelpThreshold,
             reteachThreshold = this[RETEACH] ?: defaults.reteachThreshold,
             paperSize = this[PAPER]?.let { runCatching { PaperSize.valueOf(it) }.getOrNull() } ?: defaults.paperSize,
@@ -74,6 +86,8 @@ class SettingsRepository(context: Context) {
     }
 
     private companion object {
+        val THEME_MODE = stringPreferencesKey("theme_mode")
+        val THEME_PALETTE = stringPreferencesKey("theme_palette")
         val NEEDS_HELP = intPreferencesKey("needs_help_threshold")
         val RETEACH = intPreferencesKey("reteach_threshold")
         val PAPER = stringPreferencesKey("paper_size")

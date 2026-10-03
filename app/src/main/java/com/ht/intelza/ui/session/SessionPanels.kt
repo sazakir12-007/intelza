@@ -27,7 +27,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
@@ -69,6 +68,7 @@ import com.ht.intelza.ui.questions.optionText
 import com.ht.intelza.ui.questions.questionTypeLabel
 import com.ht.intelza.ui.theme.AnswerColors
 import com.ht.intelza.ui.theme.ResultColors
+import com.ht.intelza.ui.common.CompactListItem
 
 fun SessionQuestionEntity.optionTextFor(option: AnswerOption): String = when (option) {
     AnswerOption.A -> optionA
@@ -84,7 +84,7 @@ val SessionQuestionEntity.options: List<AnswerOption>
 @Composable
 fun QuestionCard(question: SessionQuestionEntity, modifier: Modifier = Modifier) {
     ElevatedCard(modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
                 questionTypeLabel(question.type),
                 style = MaterialTheme.typography.labelMedium,
@@ -104,7 +104,7 @@ fun QuestionCard(question: SessionQuestionEntity, modifier: Modifier = Modifier)
                 )
             }
             for (option in question.options) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     LetterTile(option.name, AnswerColors.of(option))
                     Text(
                         optionText(question.type, option, question.optionTextFor(option)),
@@ -126,7 +126,7 @@ fun QuestionPanel(
     onScan: () -> Unit,
     onSkip: () -> Unit,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         QuestionCard(question)
         if (question.status == QuestionStatus.SKIPPED) {
             Text(
@@ -162,12 +162,12 @@ fun ResultsPanel(
     val question = state.current ?: return
     val result = state.currentResult ?: return
     val isLast = state.currentIndex == state.questions.lastIndex
-    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         QuestionCard(question)
 
         if (question.type != QuestionType.POLL && question.correct == null) {
             ElevatedCard {
-                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(stringResource(R.string.which_answer_correct), style = MaterialTheme.typography.titleMedium)
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         for (option in question.options) {
@@ -241,7 +241,7 @@ fun ResultsPanel(
             )
         }
 
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
             OutlinedButton(onClick = onScanAgain, modifier = Modifier.weight(1f)) {
                 Text(stringResource(R.string.scan_again))
             }
@@ -289,12 +289,12 @@ fun WrapUpPanel(
     var text by rememberSaveable { mutableStateOf("") }
     val asked = state.questions.count { it.status == QuestionStatus.ASKED }
 
-    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         if (!state.isQuickSession && state.questions.isNotEmpty()) {
             Text(stringResource(R.string.end_of_prepared_questions), style = MaterialTheme.typography.titleMedium)
         }
         ElevatedCard {
-            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.ask_quick_question), style = MaterialTheme.typography.titleMedium)
                 Text(
                     stringResource(R.string.ask_quick_question_hint),
@@ -394,7 +394,7 @@ private fun AnswerChoiceRow(selected: Boolean, onClick: () -> Unit, label: @Comp
             .selectable(selected = selected, onClick = onClick, role = Role.RadioButton)
             .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         RadioButton(selected = selected, onClick = null)
         label()
@@ -412,17 +412,17 @@ fun AttendanceSheet(
         Text(
             stringResource(R.string.attendance),
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(horizontal = 24.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
         )
         Text(
             stringResource(R.string.attendance_hint),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = 24.dp, vertical = 4.dp),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp),
         )
         LazyColumn(Modifier.padding(bottom = 24.dp)) {
             items(students, key = { it.studentId }) { student ->
-                ListItem(
+                CompactListItem(
                     modifier = Modifier.clickable { onSetPresent(student, !student.present) },
                     leadingContent = { CardNumberBadge(student.cardNumber, size = 36.dp) },
                     headlineContent = { Text(student.name) },

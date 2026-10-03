@@ -1,18 +1,29 @@
 package com.ht.intelza.ui
 
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.ht.intelza.ui.cards.PrintCardsScreen
 import com.ht.intelza.ui.classes.ClassDetailScreen
 import com.ht.intelza.ui.classes.ClassListScreen
+import com.ht.intelza.ui.common.LocalOpenDrawer
 import com.ht.intelza.ui.home.HomeScreen
 import com.ht.intelza.ui.navigation.Routes
-import com.ht.intelza.ui.navigation.navigateTopLevel
+import com.ht.intelza.ui.navigation.AppDrawer
+import com.ht.intelza.ui.navigation.navKey
+import com.ht.intelza.ui.navigation.navigateFromMenu
 import com.ht.intelza.ui.questions.QuestionEditScreen
 import com.ht.intelza.ui.questions.SubjectScreen
 import com.ht.intelza.ui.questions.SubjectsScreen
@@ -26,6 +37,7 @@ import com.ht.intelza.ui.scan.TestCardsScreen
 import com.ht.intelza.ui.session.SessionNewScreen
 import com.ht.intelza.ui.session.SessionScreen
 import com.ht.intelza.ui.settings.SettingsScreen
+import kotlinx.coroutines.launch
 
 private fun longArg(name: String): NamedNavArgument = navArgument(name) { type = NavType.LongType }
 
@@ -37,6 +49,39 @@ private fun optionalLongArg(name: String): NamedNavArgument = navArgument(name) 
 @Composable
 fun IntelzaApp() {
     val nav = rememberNavController()
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+    val backStackEntry by nav.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
+    // Swiping the menu open would fight with the camera screens, so only the button opens it there.
+    val swipeToOpen = currentRoute != Routes.SESSION && currentRoute != Routes.TEST_CARDS
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        gesturesEnabled = swipeToOpen || drawerState.isOpen,
+        drawerContent = {
+            AppDrawer(
+                currentKey = backStackEntry?.navKey(),
+                onNavigate = { route ->
+                    scope.launch { drawerState.close() }
+                    nav.navigateFromMenu(route)
+                },
+            )
+        },
+    ) {
+        CompositionLocalProvider(
+            LocalOpenDrawer provides {
+                scope.launch { drawerState.open() }
+                Unit
+            },
+        ) {
+            AppNavHost(nav)
+        }
+    }
+}
+
+@Composable
+private fun AppNavHost(nav: NavHostController) {
     val back: () -> Unit = { nav.popBackStack() }
     val openSettings = { nav.navigate(Routes.SETTINGS) }
     val openStudentReport = { id: Long -> nav.navigate(Routes.studentReport(id)) }
@@ -51,7 +96,8 @@ fun IntelzaApp() {
                 onPrintCards = { nav.navigate(Routes.printCards()) },
                 onTestCards = { nav.navigate(Routes.TEST_CARDS) },
                 onSettings = openSettings,
-                onNavigate = nav::navigateTopLevel,
+                onOpenClasses = { nav.navigateFromMenu(Routes.CLASSES) },
+                onOpenQuestions = { nav.navigateFromMenu(Routes.QUESTIONS) },
             )
         }
 
@@ -61,7 +107,6 @@ fun IntelzaApp() {
                 onOpenClass = { nav.navigate(Routes.classDetail(it)) },
                 onPrintNumberedCards = { nav.navigate(Routes.printCards()) },
                 onSettings = openSettings,
-                onNavigate = nav::navigateTopLevel,
             )
         }
         composable(Routes.CLASS_DETAIL, arguments = listOf(longArg("classId"))) {
@@ -85,7 +130,6 @@ fun IntelzaApp() {
             SubjectsScreen(
                 onOpenSubject = { nav.navigate(Routes.subject(it)) },
                 onSettings = openSettings,
-                onNavigate = nav::navigateTopLevel,
             )
         }
         composable(Routes.SUBJECT, arguments = listOf(longArg("subjectId"))) {
@@ -137,7 +181,6 @@ fun IntelzaApp() {
             ReportsScreen(
                 onOpenSession = { openSessionReport(it.id) },
                 onSettings = openSettings,
-                onNavigate = nav::navigateTopLevel,
             )
         }
         composable(Routes.SESSION_REPORT, arguments = listOf(longArg("sessionId"))) {

@@ -44,7 +44,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -69,6 +68,7 @@ import com.ht.intelza.ui.common.LetterTile
 import com.ht.intelza.ui.common.appViewModel
 import com.ht.intelza.ui.theme.AnswerColors
 import kotlinx.coroutines.launch
+import com.ht.intelza.ui.common.AppTopBar
 
 @Composable
 fun QuestionEditScreen(onBack: () -> Unit) {
@@ -103,7 +103,7 @@ fun QuestionEditScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            AppTopBar(
                 title = { Text(stringResource(if (viewModel.isNew) R.string.new_question else R.string.edit_question)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
@@ -119,8 +119,8 @@ fun QuestionEditScreen(onBack: () -> Unit) {
                         .fillMaxWidth()
                         .navigationBarsPadding()
                         .imePadding()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        .padding(12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     if (viewModel.isNew) {
                         OutlinedButton(
@@ -149,8 +149,8 @@ fun QuestionEditScreen(onBack: () -> Unit) {
                 .padding(padding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+                .padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
                 QuestionType.entries.forEachIndexed { index, type ->
@@ -300,7 +300,7 @@ private fun OptionRow(
     val scored = type != QuestionType.POLL
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = if (type == QuestionType.TRUE_FALSE) {
             Modifier.selectable(selected = isCorrect, onClick = onMarkCorrect, role = Role.RadioButton)
         } else {

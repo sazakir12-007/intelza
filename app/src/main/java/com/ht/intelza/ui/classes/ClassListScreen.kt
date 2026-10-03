@@ -15,10 +15,8 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,12 +38,13 @@ import com.ht.intelza.ui.common.SectionHeader
 import com.ht.intelza.ui.common.TextInputDialog
 import com.ht.intelza.ui.common.appViewModel
 import com.ht.intelza.ui.common.formatDate
-import com.ht.intelza.ui.navigation.AppBottomBar
-import com.ht.intelza.ui.navigation.TopLevelDestination
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import com.ht.intelza.ui.common.AppTopBar
+import com.ht.intelza.ui.common.DrawerMenuButton
+import com.ht.intelza.ui.common.CompactListItem
 
 class ClassListViewModel(private val classes: ClassRepository) : ViewModel() {
     val summaries: StateFlow<List<ClassSummary>?> = classes.observeSummaries()
@@ -61,7 +60,6 @@ fun ClassListScreen(
     onOpenClass: (Long) -> Unit,
     onPrintNumberedCards: () -> Unit,
     onSettings: () -> Unit,
-    onNavigate: (TopLevelDestination) -> Unit,
 ) {
     val viewModel = appViewModel { c, _ -> ClassListViewModel(c.classes) }
     val summaries by viewModel.summaries.collectAsStateWithLifecycle()
@@ -69,8 +67,9 @@ fun ClassListScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            AppTopBar(
                 title = { Text(stringResource(R.string.nav_classes)) },
+                navigationIcon = { DrawerMenuButton() },
                 actions = {
                     IconButton(onClick = onPrintNumberedCards) {
                         Icon(Icons.Outlined.Print, stringResource(R.string.print_cards))
@@ -81,7 +80,6 @@ fun ClassListScreen(
                 },
             )
         },
-        bottomBar = { AppBottomBar(TopLevelDestination.CLASSES, onNavigate) },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = { showCreate = true },
@@ -95,7 +93,7 @@ fun ClassListScreen(
         val archived = list.filter { it.schoolClass.archived }
         LazyColumn(
             modifier = Modifier.padding(padding),
-            contentPadding = PaddingValues(bottom = 96.dp),
+            contentPadding = PaddingValues(bottom = 88.dp),
         ) {
             if (active.isEmpty()) {
                 item {
@@ -138,7 +136,7 @@ fun ClassListScreen(
 private fun ClassRow(summary: ClassSummary, onClick: () -> Unit, archived: Boolean = false) {
     val students = pluralStringResource(R.plurals.student_count, summary.studentCount, summary.studentCount)
     val last = summary.lastSessionAt?.let { stringResource(R.string.last_evaluated, formatDate(it)) }
-    ListItem(
+    CompactListItem(
         modifier = Modifier.clickable(onClick = onClick),
         headlineContent = { Text(summary.schoolClass.name) },
         supportingContent = { Text(listOfNotNull(students, last).joinToString(" · ")) },

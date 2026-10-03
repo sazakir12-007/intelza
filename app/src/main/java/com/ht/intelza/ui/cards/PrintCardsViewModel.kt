@@ -15,11 +15,11 @@ import com.ht.intelza.data.CardSize
 import com.ht.intelza.data.ClassRepository
 import com.ht.intelza.data.PaperSize
 import com.ht.intelza.data.SettingsRepository
+import com.ht.intelza.data.db.StudentEntity
 import com.ht.intelza.domain.CardNumbers
 import com.ht.intelza.export.Sharing
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
-import com.ht.intelza.data.db.StudentEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -95,16 +95,6 @@ class PrintCardsViewModel(
                 it.copy(paperSize = updated.paper, cardSize = updated.size, printNamesOnCards = updated.includeNames)
             }
         }
-    }
-
-    fun print() {
-        val preview = _preview.value ?: return
-        Sharing.printPdf(app, preview.file, preview.file.nameWithoutExtension)
-    }
-
-    fun share() {
-        val preview = _preview.value ?: return
-        Sharing.share(app, preview.file, "application/pdf", app.getString(R.string.share_cards))
     }
 
     @OptIn(FlowPreview::class)

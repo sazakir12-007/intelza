@@ -2,6 +2,26 @@ package com.ht.intelza.ui.settings
 
 import android.app.Application
 import android.net.Uri
+import android.os.Build
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.outlined.DeleteSweep
+import androidx.compose.material.icons.outlined.School
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.semantics.Role
+import com.ht.intelza.data.SampleDataLoader
+import com.ht.intelza.data.ThemeMode
+import com.ht.intelza.data.ThemePalette
+import com.ht.intelza.ui.theme.PaletteSwatches
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -27,7 +47,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
@@ -39,7 +58,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -64,6 +82,7 @@ import com.ht.intelza.data.CardSize
 import com.ht.intelza.data.PaperSize
 import com.ht.intelza.data.SettingsRepository
 import com.ht.intelza.export.Sharing
+import com.ht.intelza.ui.common.BrandLockup
 import com.ht.intelza.ui.common.ConfirmDialog
 import com.ht.intelza.ui.common.SectionHeader
 import com.ht.intelza.ui.common.appViewModel
@@ -75,11 +94,14 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.File
 import java.time.LocalDate
+import com.ht.intelza.ui.common.AppTopBar
+import com.ht.intelza.ui.common.CompactListItem
 
 class SettingsViewModel(
     private val app: Application,
     private val settingsRepository: SettingsRepository,
     private val backups: BackupManager,
+    private val sampleData: SampleDataLoader,
 ) : ViewModel() {
     val settings: StateFlow<AppSettings?> = settingsRepository.settings
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
@@ -114,6 +136,20 @@ class SettingsViewModel(
         backups.restartApp()
     }
 
+    fun addSampleData() = runBusy {
+        val added = sampleData.add()
+        _message.value = if (added.isEmpty) {
+            app.getString(R.string.sample_data_already)
+        } else {
+            app.getString(R.string.sample_data_added, added.classes, added.students, added.topics, added.questions)
+        }
+    }
+
+    fun removeSampleData() = runBusy {
+        val removed = sampleData.remove()
+        _message.value = app.getString(if (removed > 0) R.string.sample_data_removed else R.string.sample_data_none)
+    }
+
     fun messageShown() {
         _message.value = null
     }
@@ -138,7 +174,7 @@ fun SettingsScreen(
     onPrintCards: () -> Unit,
     onTestCards: () -> Unit,
 ) {
-    val viewModel = appViewModel { c, _ -> SettingsViewModel(c.application, c.settings, c.backups) }
+    val viewModel = appViewModel { c, _ -> SettingsViewModel(c.application, c.settings, c.backups, c.sampleData) }
     val settings by viewModel.settings.collectAsStateWithLifecycle()
     val busy by viewModel.busy.collectAsStateWithLifecycle()
     val message by viewModel.message.collectAsStateWithLifecycle()
@@ -148,6 +184,7 @@ fun SettingsScreen(
     var showBackupChoice by rememberSaveable { mutableStateOf(false) }
     var showLicences by rememberSaveable { mutableStateOf(false) }
     var showPrivacy by rememberSaveable { mutableStateOf(false) }
+    var confirmRemoveSample by rememberSaveable { mutableStateOf(false) }
     val shareTitle = stringResource(R.string.share_backup)
 
     val saveBackup = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
@@ -166,7 +203,7 @@ fun SettingsScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            AppTopBar(
                 title = { Text(stringResource(R.string.settings)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
@@ -179,6 +216,16 @@ fun SettingsScreen(
     ) { padding ->
         val current = settings ?: return@Scaffold
         LazyColumn(Modifier.padding(padding), contentPadding = PaddingValues(bottom = 32.dp)) {
+            item { SectionHeader(stringResource(R.string.settings_appearance)) }
+            item {
+                AppearanceSettings(
+                    mode = current.themeMode,
+                    palette = current.themePalette,
+                    onMode = { mode -> viewModel.update { it.copy(themeMode = mode) } },
+                    onPalette = { palette -> viewModel.update { it.copy(themePalette = palette) } },
+                )
+            }
+
             item { SectionHeader(stringResource(R.string.settings_results)) }
             item {
                 ThresholdSetting(
@@ -218,7 +265,7 @@ fun SettingsScreen(
 
             item { SectionHeader(stringResource(R.string.settings_cards)) }
             item {
-                Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Column(Modifier.padding(horizontal = 12.dp, vertical = 6.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(stringResource(R.string.card_size), style = MaterialTheme.typography.bodyLarge)
                     SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
                         CardSize.entries.forEachIndexed { index, size ->
@@ -272,10 +319,27 @@ fun SettingsScreen(
             }
             if (busy) {
                 item {
-                    Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.Center) {
+                    Row(Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.Center) {
                         CircularProgressIndicator()
                     }
                 }
+            }
+
+            item { SectionHeader(stringResource(R.string.settings_sample_data)) }
+            item {
+                ActionSetting(
+                    Icons.Outlined.School,
+                    stringResource(R.string.sample_data_add),
+                    stringResource(R.string.sample_data_add_hint),
+                    viewModel::addSampleData,
+                )
+            }
+            item {
+                ActionSetting(
+                    Icons.Outlined.DeleteSweep,
+                    stringResource(R.string.sample_data_remove),
+                    stringResource(R.string.sample_data_remove_hint),
+                ) { confirmRemoveSample = true }
             }
 
             item { SectionHeader(stringResource(R.string.settings_about)) }
@@ -290,12 +354,14 @@ fun SettingsScreen(
                 }
             }
             item {
-                Text(
-                    stringResource(R.string.version_value, BuildConfig.VERSION_NAME),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(16.dp),
-                )
+                Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    BrandLockup()
+                    Text(
+                        stringResource(R.string.version_value, BuildConfig.VERSION_NAME),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
         }
     }
@@ -333,6 +399,19 @@ fun SettingsScreen(
         )
     }
 
+    if (confirmRemoveSample) {
+        ConfirmDialog(
+            title = stringResource(R.string.sample_data_remove_title),
+            message = stringResource(R.string.sample_data_remove_message),
+            confirmLabel = stringResource(R.string.remove),
+            onDismiss = { confirmRemoveSample = false },
+            onConfirm = {
+                confirmRemoveSample = false
+                viewModel.removeSampleData()
+            },
+        )
+    }
+
     if (showPrivacy) {
         AlertDialog(
             onDismissRequest = { showPrivacy = false },
@@ -363,7 +442,7 @@ fun SettingsScreen(
 @Composable
 private fun ThresholdSetting(title: String, description: String, value: Int, onChange: (Int) -> Unit) {
     var local by remember(value) { mutableFloatStateOf(value.toFloat()) }
-    Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+    Column(Modifier.padding(horizontal = 12.dp, vertical = 6.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(title, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
             Text("${local.toInt()}%", style = MaterialTheme.typography.titleMedium)
@@ -381,7 +460,7 @@ private fun ThresholdSetting(title: String, description: String, value: Int, onC
 
 @Composable
 private fun SwitchSetting(title: String, description: String?, checked: Boolean, onChange: (Boolean) -> Unit) {
-    ListItem(
+    CompactListItem(
         modifier = Modifier.clickable { onChange(!checked) },
         headlineContent = { Text(title) },
         supportingContent = if (description != null) { { Text(description) } } else null,
@@ -396,10 +475,90 @@ private fun ActionSetting(
     description: String?,
     onClick: () -> Unit,
 ) {
-    ListItem(
+    CompactListItem(
         modifier = Modifier.clickable(onClick = onClick),
         leadingContent = { Icon(icon, null) },
         headlineContent = { Text(title) },
         supportingContent = if (description != null) { { Text(description) } } else null,
     )
 }
+
+@Composable
+private fun AppearanceSettings(
+    mode: ThemeMode,
+    palette: ThemePalette,
+    onMode: (ThemeMode) -> Unit,
+    onPalette: (ThemePalette) -> Unit,
+) {
+    Column(Modifier.padding(horizontal = 12.dp, vertical = 6.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(stringResource(R.string.theme), style = MaterialTheme.typography.bodyLarge)
+        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+            ThemeMode.entries.forEachIndexed { index, value ->
+                SegmentedButton(
+                    selected = mode == value,
+                    onClick = { onMode(value) },
+                    shape = SegmentedButtonDefaults.itemShape(index, ThemeMode.entries.size),
+                ) {
+                    Text(
+                        stringResource(
+                            when (value) {
+                                ThemeMode.SYSTEM -> R.string.theme_system
+                                ThemeMode.LIGHT -> R.string.theme_light
+                                ThemeMode.DARK -> R.string.theme_dark
+                            },
+                        ),
+                    )
+                }
+            }
+        }
+        Text(stringResource(R.string.accent_colour), style = MaterialTheme.typography.bodyLarge)
+        Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+            for (option in ThemePalette.entries) {
+                if (option == ThemePalette.DYNAMIC && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) continue
+                PaletteChoice(option, selected = option == palette, onClick = { onPalette(option) })
+            }
+        }
+    }
+}
+
+@Composable
+private fun PaletteChoice(palette: ThemePalette, selected: Boolean, onClick: () -> Unit) {
+    val label = stringResource(
+        when (palette) {
+            ThemePalette.INDIGO -> R.string.palette_indigo
+            ThemePalette.TEAL -> R.string.palette_teal
+            ThemePalette.PURPLE -> R.string.palette_purple
+            ThemePalette.ORANGE -> R.string.palette_orange
+            ThemePalette.DYNAMIC -> R.string.palette_wallpaper
+        },
+    )
+    val fill = PaletteSwatches[palette]?.let { SolidColor(it) } ?: Brush.sweepGradient(
+        listOf(Color(0xFFE53935), Color(0xFFFDD835), Color(0xFF43A047), Color(0xFF1E88E5), Color(0xFFE53935)),
+    )
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .selectable(selected = selected, onClick = onClick, role = Role.RadioButton)
+            .padding(4.dp),
+    ) {
+        Box(
+            Modifier
+                .size(34.dp)
+                .clip(CircleShape)
+                .background(fill)
+                .border(
+                    width = if (selected) 3.dp else 1.dp,
+                    color = if (selected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.outlineVariant,
+                    shape = CircleShape,
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (selected) {
+                Icon(Icons.Filled.Check, contentDescription = null, tint = Color.White, modifier = Modifier.size(18.dp))
+            }
+        }
+        Text(label, style = MaterialTheme.typography.labelSmall)
+    }
+}
+

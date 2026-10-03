@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ht.intelza.R
 import com.ht.intelza.domain.AnswerOption
+import com.ht.intelza.ui.common.BrandLockup
 import com.ht.intelza.ui.common.formatPercent
 import com.ht.intelza.ui.questions.StoredImage
 import com.ht.intelza.ui.questions.optionText
@@ -110,24 +111,34 @@ private fun Header(state: PresenterState, s: Scale) {
 
 @Composable
 private fun Waiting(state: PresenterState, s: Scale) {
-    Column(
-        Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Text(
-            state.title.ifEmpty { stringResource(R.string.quick_session) },
-            color = Color.White,
-            fontSize = s.sp(52),
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-        )
-        Spacer(Modifier.height(s.dp(16)))
-        Text(
-            stringResource(R.string.presenter_get_ready),
-            color = Faded,
-            fontSize = s.sp(26),
-            textAlign = TextAlign.Center,
+    Box(Modifier.fillMaxSize()) {
+        Column(
+            Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Text(
+                state.title.ifEmpty { stringResource(R.string.quick_session) },
+                color = Color.White,
+                fontSize = s.sp(52),
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+            )
+            Spacer(Modifier.height(s.dp(16)))
+            Text(
+                stringResource(R.string.presenter_get_ready),
+                color = Faded,
+                fontSize = s.sp(26),
+                textAlign = TextAlign.Center,
+            )
+        }
+        BrandLockup(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            wordmarkSize = s.sp(22),
+            taglineSize = s.sp(13),
+            wordmarkColor = Color.White,
+            taglineColor = Faded,
+            horizontalAlignment = Alignment.CenterHorizontally,
         )
     }
 }

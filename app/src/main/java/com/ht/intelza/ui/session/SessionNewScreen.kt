@@ -15,17 +15,15 @@ import androidx.compose.material.icons.outlined.Bolt
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -51,6 +49,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import androidx.compose.material.icons.outlined.Groups
+import com.ht.intelza.ui.common.AppTopBar
+import com.ht.intelza.ui.common.CompactListItem
 
 /** What the session will ask: a topic from the bank, or quick questions made up on the spot. */
 sealed interface SessionContent {
@@ -112,7 +112,7 @@ fun SessionNewScreen(onBack: () -> Unit, onStarted: (sessionId: Long) -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            AppTopBar(
                 title = { Text(stringResource(R.string.start_evaluation)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
@@ -127,7 +127,7 @@ fun SessionNewScreen(onBack: () -> Unit, onStarted: (sessionId: Long) -> Unit) {
                     Modifier
                         .fillMaxWidth()
                         .navigationBarsPadding()
-                        .padding(16.dp),
+                        .padding(12.dp),
                     horizontalArrangement = Arrangement.End,
                 ) {
                     Button(
@@ -141,7 +141,7 @@ fun SessionNewScreen(onBack: () -> Unit, onStarted: (sessionId: Long) -> Unit) {
     ) { padding ->
         val classList = classes ?: return@Scaffold
         val topicList = topics ?: return@Scaffold
-        LazyColumn(Modifier.padding(padding), contentPadding = PaddingValues(bottom = 24.dp)) {
+        LazyColumn(Modifier.padding(padding), contentPadding = PaddingValues(bottom = 16.dp)) {
             item { SectionHeader(stringResource(R.string.step_choose_class)) }
             if (classList.isEmpty()) {
                 item {
@@ -189,7 +189,7 @@ fun SessionNewScreen(onBack: () -> Unit, onStarted: (sessionId: Long) -> Unit) {
                         stringResource(R.string.no_topics_for_session),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                     )
                 }
             }
@@ -205,16 +205,16 @@ private fun SelectableRow(
     subtitle: String,
     leading: (@Composable () -> Unit)? = null,
 ) {
-    ListItem(
+    CompactListItem(
         modifier = Modifier.selectable(selected = selected, onClick = onSelect, role = Role.RadioButton),
         headlineContent = { Text(title) },
         supportingContent = { Text(subtitle) },
         leadingContent = leading,
         trailingContent = { RadioButton(selected = selected, onClick = null) },
-        colors = if (selected) {
-            ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f))
+        containerColor = if (selected) {
+            MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f)
         } else {
-            ListItemDefaults.colors()
+            Color.Transparent
         },
     )
 }

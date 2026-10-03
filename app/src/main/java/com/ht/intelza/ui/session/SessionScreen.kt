@@ -39,7 +39,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -60,6 +59,7 @@ import com.ht.intelza.R
 import com.ht.intelza.data.db.SessionStudentRow
 import com.ht.intelza.ui.common.ConfirmDialog
 import com.ht.intelza.ui.common.appViewModel
+import com.ht.intelza.ui.common.AppTopBar
 
 @Composable
 fun SessionScreen(onBack: () -> Unit, onFinished: (sessionId: Long) -> Unit) {
@@ -112,7 +112,7 @@ fun SessionScreen(onBack: () -> Unit, onFinished: (sessionId: Long) -> Unit) {
 
         else -> Scaffold(
             topBar = {
-                TopAppBar(
+                AppTopBar(
                     title = {
                         Column {
                             Text(state.className, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -154,7 +154,7 @@ fun SessionScreen(onBack: () -> Unit, onFinished: (sessionId: Long) -> Unit) {
                 externalDisplay?.let {
                     Surface(color = MaterialTheme.colorScheme.tertiaryContainer, modifier = Modifier.fillMaxWidth()) {
                         Row(
-                            Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                            Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
@@ -168,7 +168,7 @@ fun SessionScreen(onBack: () -> Unit, onFinished: (sessionId: Long) -> Unit) {
                     Modifier
                         .weight(1f)
                         .verticalScroll(rememberScrollState())
-                        .padding(16.dp)
+                        .padding(12.dp)
                         .navigationBarsPadding(),
                 ) {
                     when (phase) {
@@ -320,7 +320,7 @@ private fun PresenterMode(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .navigationBarsPadding()
-                .padding(16.dp),
+                .padding(12.dp),
         ) {
             Row(
                 Modifier.padding(horizontal = 8.dp, vertical = 4.dp),

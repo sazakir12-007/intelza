@@ -6,6 +6,7 @@ import com.ht.intelza.data.ClassRepository
 import com.ht.intelza.data.ImageStore
 import com.ht.intelza.data.QuestionRepository
 import com.ht.intelza.data.ReportRepository
+import com.ht.intelza.data.SampleDataLoader
 import com.ht.intelza.data.SessionRepository
 import com.ht.intelza.data.SettingsRepository
 import com.ht.intelza.data.db.IntelzaDatabase
@@ -22,4 +23,5 @@ class AppContainer(val application: Application) {
     val reports = ReportRepository(database, sessions)
     val exporter = ReportExporter(application, reports, classes, settings)
     val backups = BackupManager(application, database, images)
+    val sampleData = SampleDataLoader(database)
 }

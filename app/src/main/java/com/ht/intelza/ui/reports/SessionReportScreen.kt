@@ -27,13 +27,11 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -73,6 +71,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.File
+import com.ht.intelza.ui.common.AppTopBar
+import com.ht.intelza.ui.common.CompactListItem
 
 class SessionReportViewModel(
     reports: ReportRepository,
@@ -135,7 +135,7 @@ fun SessionReportScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            AppTopBar(
                 title = {
                     Column {
                         Text(
@@ -217,13 +217,13 @@ fun SessionReportScreen(
     ) { padding ->
         val data = report ?: return@Scaffold
         val info = overview ?: return@Scaffold
-        LazyColumn(Modifier.padding(padding), contentPadding = PaddingValues(bottom = 24.dp)) {
+        LazyColumn(Modifier.padding(padding), contentPadding = PaddingValues(bottom = 16.dp)) {
             item { Summary(info, data, settings) }
             item { Flags(data, settings, onStudent) }
 
             item { SectionHeader(stringResource(R.string.students)) }
             items(data.students, key = { "s-${it.student.studentId}" }) { result ->
-                ListItem(
+                CompactListItem(
                     modifier = Modifier.clickable { onStudent(result.student.studentId) },
                     leadingContent = { CardNumberBadge(result.student.cardNumber, size = 36.dp) },
                     headlineContent = { Text(result.student.name) },
@@ -240,7 +240,7 @@ fun SessionReportScreen(
                         stringResource(R.string.absent_list, data.absent.joinToString(", ") { it.name }),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(16.dp),
+                        modifier = Modifier.padding(12.dp),
                     )
                 }
             }
@@ -252,7 +252,7 @@ fun SessionReportScreen(
                     Modifier
                         .fillMaxWidth()
                         .clickable { expandedQuestion = if (expanded) null else result.question.id }
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                        .padding(horizontal = 12.dp, vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -303,8 +303,8 @@ private fun Summary(info: SessionOverview, report: SessionReport, settings: AppS
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+            .padding(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         val average = report.classAverage
         StatBlock(
@@ -329,7 +329,7 @@ private fun Summary(info: SessionOverview, report: SessionReport, settings: AppS
             stringResource(R.string.evaluation_in_progress),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.tertiary,
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 12.dp),
         )
     }
 }
@@ -338,7 +338,7 @@ private fun Summary(info: SessionOverview, report: SessionReport, settings: AppS
 private fun Flags(report: SessionReport, settings: AppSettings, onStudent: (Long) -> Unit) {
     val struggling = report.studentsNeedingHelp(settings.needsHelpThreshold)
     val reteach = report.questionsToReteach(settings.reteachThreshold)
-    Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(Modifier.padding(horizontal = 12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         ReportCard(stringResource(R.string.needs_help_heading, settings.needsHelpThreshold)) {
             if (struggling.isEmpty()) {
                 Text(stringResource(R.string.nobody_needs_help), style = MaterialTheme.typography.bodyMedium)

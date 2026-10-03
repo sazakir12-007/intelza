@@ -178,7 +178,7 @@ fun SessionScanView(
                 Column(
                     Modifier
                         .navigationBarsPadding()
-                        .padding(16.dp),
+                        .padding(12.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {

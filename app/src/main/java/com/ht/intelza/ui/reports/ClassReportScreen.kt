@@ -16,13 +16,11 @@ import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -59,6 +57,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.File
+import com.ht.intelza.ui.common.AppTopBar
+import com.ht.intelza.ui.common.CompactListItem
 
 data class ClassReport(
     val sessions: List<SessionOverview>,
@@ -118,7 +118,7 @@ fun ClassReportScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            AppTopBar(
                 title = {
                     Column {
                         Text(schoolClass?.name.orEmpty())
@@ -152,7 +152,7 @@ fun ClassReportScreen(
         snackbarHost = { SnackbarHost(snackbar) },
     ) { padding ->
         val data = report ?: return@Scaffold
-        LazyColumn(Modifier.padding(padding), contentPadding = PaddingValues(bottom = 24.dp)) {
+        LazyColumn(Modifier.padding(padding), contentPadding = PaddingValues(bottom = 16.dp)) {
             if (data.sessions.isEmpty()) {
                 item {
                     EmptyState(
@@ -166,7 +166,7 @@ fun ClassReportScreen(
             val averages = data.sessions.mapNotNull { it.average }
             val overall = averages.takeIf { it.isNotEmpty() }?.average()?.toFloat()
             item {
-                Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Row(Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     StatBlock(
                         value = overall?.let(::formatPercent) ?: "–",
                         label = stringResource(R.string.class_average),
@@ -186,14 +186,14 @@ fun ClassReportScreen(
                     settings = settings,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 12.dp),
                 )
             }
 
             item { SectionHeader(stringResource(R.string.students_lowest_first)) }
             val students = data.students.sortedWith(compareBy(nullsLast<Float>()) { it.average })
             items(students, key = { "st-${it.student.id}" }) { progress ->
-                ListItem(
+                CompactListItem(
                     modifier = Modifier.clickable { onStudent(progress.student.id) },
                     leadingContent = { CardNumberBadge(progress.student.cardNumber, size = 36.dp) },
                     headlineContent = { Text(progress.student.name) },

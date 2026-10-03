@@ -1,25 +1,8 @@
 package com.ht.intelza.ui.navigation
 
-import androidx.annotation.StringRes
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Groups
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Insights
-import androidx.compose.material.icons.filled.Quiz
-import androidx.compose.material.icons.outlined.Groups
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Insights
-import androidx.compose.material.icons.outlined.Quiz
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import com.ht.intelza.R
 
 object Routes {
     const val HOME = "home"
@@ -57,41 +40,41 @@ object Routes {
     fun studentReport(studentId: Long) = "reports/student/$studentId"
     fun topicReport(topicId: Long) = "reports/topic/$topicId"
     fun classReport(classId: Long) = "reports/class/$classId"
+
+    /** Main sections; opening one from the menu starts a fresh back stack from Home. */
+    val ROOTS = setOf(HOME, CLASSES, QUESTIONS, REPORTS)
 }
 
-enum class TopLevelDestination(
-    val route: String,
-    @param:StringRes val label: Int,
-    val icon: ImageVector,
-    val selectedIcon: ImageVector,
-) {
-    HOME(Routes.HOME, R.string.nav_home, Icons.Outlined.Home, Icons.Filled.Home),
-    CLASSES(Routes.CLASSES, R.string.nav_classes, Icons.Outlined.Groups, Icons.Filled.Groups),
-    QUESTIONS(Routes.QUESTIONS, R.string.nav_questions, Icons.Outlined.Quiz, Icons.Filled.Quiz),
-    REPORTS(Routes.REPORTS, R.string.nav_reports, Icons.Outlined.Insights, Icons.Filled.Insights),
-}
-
-fun NavController.navigateTopLevel(destination: TopLevelDestination) {
-    navigate(destination.route) {
-        popUpTo(graph.findStartDestination().id) { saveState = true }
-        launchSingleTop = true
-        restoreState = true
+/** Navigates to a destination picked in the navigation menu. */
+fun NavController.navigateFromMenu(route: String) {
+    if (route in Routes.ROOTS) {
+        navigate(route) {
+            popUpTo(graph.findStartDestination().id) { inclusive = route == Routes.HOME }
+            launchSingleTop = true
+        }
+    } else {
+        navigate(route) { launchSingleTop = true }
     }
 }
 
-@Composable
-fun AppBottomBar(current: TopLevelDestination, onNavigate: (TopLevelDestination) -> Unit) {
-    NavigationBar {
-        for (destination in TopLevelDestination.entries) {
-            val selected = destination == current
-            NavigationBarItem(
-                selected = selected,
-                onClick = { if (!selected) onNavigate(destination) },
-                icon = {
-                    Icon(if (selected) destination.selectedIcon else destination.icon, contentDescription = null)
-                },
-                label = { Text(stringResource(destination.label)) },
-            )
-        }
+/** A short key for the screen this entry shows, used to highlight it in the menu. */
+fun NavBackStackEntry.navKey(): String {
+    val route = destination.route ?: return ""
+    fun id(name: String): Long = arguments?.getLong(name, -1L) ?: -1L
+    return when (route) {
+        Routes.HOME -> "home"
+        Routes.CLASSES -> "classes"
+        Routes.CLASS_DETAIL -> "class/${id("classId")}"
+        Routes.PRINT_CARDS -> id("classId").let { if (it > 0) "cards/$it" else "cards" }
+        Routes.QUESTIONS -> "questions"
+        Routes.SUBJECT -> "subject/${id("subjectId")}"
+        Routes.TOPIC, Routes.QUESTION_EDIT -> "topic/${id("topicId")}"
+        Routes.SESSION_NEW -> "new-session"
+        Routes.SESSION -> "session/${id("sessionId")}"
+        Routes.REPORTS, Routes.SESSION_REPORT, Routes.STUDENT_REPORT, Routes.TOPIC_REPORT -> "reports"
+        Routes.CLASS_REPORT -> "classreport/${id("classId")}"
+        Routes.SETTINGS -> "settings"
+        Routes.TEST_CARDS -> "test-cards"
+        else -> route
     }
 }

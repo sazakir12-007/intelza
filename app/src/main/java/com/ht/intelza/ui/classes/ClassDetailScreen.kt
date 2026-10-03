@@ -36,7 +36,6 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -44,7 +43,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -69,6 +67,8 @@ import com.ht.intelza.ui.common.ConfirmDialog
 import com.ht.intelza.ui.common.EmptyState
 import com.ht.intelza.ui.common.TextInputDialog
 import com.ht.intelza.ui.common.appViewModel
+import com.ht.intelza.ui.common.AppTopBar
+import com.ht.intelza.ui.common.CompactListItem
 
 @Composable
 fun ClassDetailScreen(
@@ -103,7 +103,7 @@ fun ClassDetailScreen(
     val schoolClass = state.schoolClass
     Scaffold(
         topBar = {
-            TopAppBar(
+            AppTopBar(
                 title = {
                     Text(schoolClass?.name.orEmpty(), maxLines = 1, overflow = TextOverflow.Ellipsis)
                 },
@@ -179,13 +179,13 @@ fun ClassDetailScreen(
         if (!state.loaded) return@Scaffold
         LazyColumn(
             modifier = Modifier.padding(padding),
-            contentPadding = PaddingValues(bottom = 96.dp),
+            contentPadding = PaddingValues(bottom = 88.dp),
         ) {
             item {
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -218,7 +218,7 @@ fun ClassDetailScreen(
                 }
             }
             items(state.students, key = { it.id }) { student ->
-                ListItem(
+                CompactListItem(
                     modifier = Modifier.clickable {
                         editing = StudentEditTarget(student.id, student.name, student.rollNumber, student.cardNumber)
                     },
@@ -354,7 +354,7 @@ private fun StudentDialog(
             Text(stringResource(if (target.studentId == null) R.string.add_student else R.string.edit_student))
         },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },

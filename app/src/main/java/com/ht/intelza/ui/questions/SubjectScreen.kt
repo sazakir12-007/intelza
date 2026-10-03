@@ -23,12 +23,10 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,6 +55,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import com.ht.intelza.ui.common.AppTopBar
+import com.ht.intelza.ui.common.CompactListItem
 
 class SubjectViewModel(
     private val questions: QuestionRepository,
@@ -94,7 +94,7 @@ fun SubjectScreen(onBack: () -> Unit, onOpenTopic: (Long) -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            AppTopBar(
                 title = { Text(subject?.name.orEmpty()) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
@@ -135,7 +135,7 @@ fun SubjectScreen(onBack: () -> Unit, onOpenTopic: (Long) -> Unit) {
         },
     ) { padding ->
         val list = topics ?: return@Scaffold
-        LazyColumn(Modifier.padding(padding), contentPadding = PaddingValues(bottom = 96.dp)) {
+        LazyColumn(Modifier.padding(padding), contentPadding = PaddingValues(bottom = 88.dp)) {
             if (list.isEmpty()) {
                 item {
                     EmptyState(
@@ -151,7 +151,7 @@ fun SubjectScreen(onBack: () -> Unit, onOpenTopic: (Long) -> Unit) {
                     pluralStringResource(R.plurals.question_count, summary.questionCount, summary.questionCount),
                     summary.lastEvaluatedAt?.let { stringResource(R.string.last_evaluated, formatDate(it)) },
                 )
-                ListItem(
+                CompactListItem(
                     modifier = Modifier.clickable { onOpenTopic(summary.topic.id) },
                     headlineContent = { Text(summary.topic.name) },
                     supportingContent = { Text(details.joinToString(" · ")) },
@@ -215,7 +215,7 @@ fun TopicDialog(
         onDismissRequest = onDismiss,
         title = { Text(title) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },

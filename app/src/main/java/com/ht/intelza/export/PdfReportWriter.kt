@@ -23,6 +23,7 @@ class PdfReportWriter(private val footer: String) {
     private val boldPaint = textPaint(10f, bold = true)
     private val smallPaint = textPaint(8f, color = Color.GRAY)
     private val subtitlePaint = textPaint(10f, color = Color.DKGRAY)
+    private val brandPaint = textPaint(9f, bold = true, color = Color.rgb(63, 81, 196)).apply { letterSpacing = 0.12f }
     private val linePaint = Paint().apply {
         color = Color.rgb(220, 220, 225)
         strokeWidth = 0.6f
@@ -30,6 +31,13 @@ class PdfReportWriter(private val footer: String) {
     private val fillPaint = Paint().apply { style = Paint.Style.FILL }
 
     private val canvas: Canvas get() = (page ?: newPage()).canvas
+
+    /** Small brand line above the title, e.g. "INTELZA · Understanding Beyond Answers". */
+    fun brand(text: String) {
+        ensureSpace(20f)
+        canvas.drawText(text, MARGIN, y + 9f, brandPaint)
+        y += 20f
+    }
 
     fun title(text: String) {
         ensureSpace(30f)

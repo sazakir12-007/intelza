@@ -1,9 +1,6 @@
 package com.ht.intelza.ui.session
 
-import android.app.Activity
 import android.app.Presentation
-import android.content.Context
-import android.content.ContextWrapper
 import android.hardware.display.DisplayManager
 import android.os.Handler
 import android.os.Looper
@@ -24,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
+import com.ht.intelza.ui.common.findActivity
 import com.ht.intelza.ui.theme.IntelzaTheme
 
 /**
@@ -87,12 +85,3 @@ fun SecondaryDisplayPresenter(state: PresenterState?): String? {
 
 private fun DisplayManager.presentationDisplay(): Display? =
     getDisplays(DisplayManager.DISPLAY_CATEGORY_PRESENTATION).firstOrNull()
-
-fun Context.findActivity(): Activity? {
-    var current: Context? = this
-    while (current is ContextWrapper) {
-        if (current is Activity) return current
-        current = current.baseContext
-    }
-    return null
-}

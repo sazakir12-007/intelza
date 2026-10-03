@@ -20,10 +20,8 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,12 +42,13 @@ import com.ht.intelza.ui.common.ConfirmDialog
 import com.ht.intelza.ui.common.EmptyState
 import com.ht.intelza.ui.common.TextInputDialog
 import com.ht.intelza.ui.common.appViewModel
-import com.ht.intelza.ui.navigation.AppBottomBar
-import com.ht.intelza.ui.navigation.TopLevelDestination
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import com.ht.intelza.ui.common.AppTopBar
+import com.ht.intelza.ui.common.DrawerMenuButton
+import com.ht.intelza.ui.common.CompactListItem
 
 class SubjectsViewModel(private val questions: QuestionRepository) : ViewModel() {
     val subjects: StateFlow<List<SubjectSummary>?> = questions.observeSubjects()
@@ -67,7 +66,6 @@ class SubjectsViewModel(private val questions: QuestionRepository) : ViewModel()
 fun SubjectsScreen(
     onOpenSubject: (Long) -> Unit,
     onSettings: () -> Unit,
-    onNavigate: (TopLevelDestination) -> Unit,
 ) {
     val viewModel = appViewModel { c, _ -> SubjectsViewModel(c.questions) }
     val subjects by viewModel.subjects.collectAsStateWithLifecycle()
@@ -78,8 +76,9 @@ fun SubjectsScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            AppTopBar(
                 title = { Text(stringResource(R.string.question_bank)) },
+                navigationIcon = { DrawerMenuButton() },
                 actions = {
                     IconButton(onClick = onSettings) {
                         Icon(Icons.Outlined.Settings, stringResource(R.string.settings))
@@ -87,7 +86,6 @@ fun SubjectsScreen(
                 },
             )
         },
-        bottomBar = { AppBottomBar(TopLevelDestination.QUESTIONS, onNavigate) },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = { adding = true },
@@ -97,7 +95,7 @@ fun SubjectsScreen(
         },
     ) { padding ->
         val list = subjects ?: return@Scaffold
-        LazyColumn(Modifier.padding(padding), contentPadding = PaddingValues(bottom = 96.dp)) {
+        LazyColumn(Modifier.padding(padding), contentPadding = PaddingValues(bottom = 88.dp)) {
             if (list.isEmpty()) {
                 item {
                     EmptyState(
@@ -109,7 +107,7 @@ fun SubjectsScreen(
             }
             items(list, key = { it.subject.id }) { summary ->
                 Box {
-                    ListItem(
+                    CompactListItem(
                         modifier = Modifier.combinedClickable(
                             onClick = { onOpenSubject(summary.subject.id) },
                             onLongClick = { menuFor = summary },

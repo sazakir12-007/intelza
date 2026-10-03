@@ -12,6 +12,7 @@ import android.print.PrintDocumentAdapter
 import android.print.PrintDocumentInfo
 import android.print.PrintManager
 import androidx.core.content.FileProvider
+import com.ht.intelza.ui.common.findActivity
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -32,18 +33,26 @@ object Sharing {
             .putExtra(Intent.EXTRA_STREAM, uri)
             .putExtra(Intent.EXTRA_SUBJECT, file.nameWithoutExtension)
             .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        val chooser = Intent.createChooser(send, chooserTitle)
+        // Starting another app from outside a screen needs a new task.
+        if (context.findActivity() == null) chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         return try {
-            context.startActivity(Intent.createChooser(send, chooserTitle))
+            context.startActivity(chooser)
             true
         } catch (e: ActivityNotFoundException) {
             false
         }
     }
 
-    /** Sends a PDF file to Android's print dialog. */
-    fun printPdf(context: Context, file: File, jobName: String) {
-        val printManager = context.getSystemService(PrintManager::class.java) ?: return
+    /**
+     * Sends a PDF file to Android's print dialog. Printing must start from a screen, so
+     * [context] has to belong to an activity; returns false otherwise.
+     */
+    fun printPdf(context: Context, file: File, jobName: String): Boolean {
+        val activity = context.findActivity() ?: return false
+        val printManager = activity.getSystemService(PrintManager::class.java) ?: return false
         printManager.print(jobName, PdfFilePrintAdapter(file), PrintAttributes.Builder().build())
+        return true
     }
 
     fun safeFileName(name: String): String =

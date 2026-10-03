@@ -27,6 +27,9 @@ interface ClassDao {
     )
     fun observeSummaries(): Flow<List<ClassSummary>>
 
+    @Query("SELECT * FROM classes")
+    suspend fun getAll(): List<ClassEntity>
+
     @Query("SELECT * FROM classes WHERE id = :id")
     fun observe(id: Long): Flow<ClassEntity?>
 
@@ -92,6 +95,9 @@ interface SubjectDao {
     )
     fun observeSummaries(): Flow<List<SubjectSummary>>
 
+    @Query("SELECT * FROM subjects")
+    suspend fun getAll(): List<SubjectEntity>
+
     @Query("SELECT * FROM subjects WHERE id = :id")
     fun observe(id: Long): Flow<SubjectEntity?>
 
@@ -156,6 +162,9 @@ interface TopicDao {
 
     @Query("SELECT * FROM topics WHERE id = :id")
     suspend fun get(id: Long): TopicEntity?
+
+    @Query("SELECT * FROM topics WHERE subjectId = :subjectId")
+    suspend fun getForSubject(subjectId: Long): List<TopicEntity>
 
     @Insert
     suspend fun insert(topic: TopicEntity): Long

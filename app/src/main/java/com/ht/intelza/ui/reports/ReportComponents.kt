@@ -62,7 +62,7 @@ fun StatBlock(value: String, label: String, modifier: Modifier = Modifier, color
 @Composable
 fun ReportCard(title: String, content: @Composable () -> Unit) {
     ElevatedCard(Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(title, style = MaterialTheme.typography.titleMedium)
             content()
         }

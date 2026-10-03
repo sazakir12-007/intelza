@@ -96,6 +96,19 @@ every answer at once, and then shows who understood and who didn't.
   added later. Questions can be typed in any language.
 - **N4** No ads, tracking or analytics.
 
+## Additions after confirmation (3 October 2026)
+- **H1** Navigation through a sliding side menu instead of a bottom bar. The menu lists
+  every screen as a tree: classes (with their cards, evaluation and report), the question
+  bank (subjects and their topics), reports, tools and settings.
+- **H2** Compact layout: denser lists, smaller type and spacing.
+- **H3** Theme option: system, light or dark, and a choice of accent colours (including
+  wallpaper colours on Android 12+). Also switchable from the menu.
+- **H4** Sample data for trying the app: Grade 2 and Grade 3 test classes with 10
+  students each, and for each of the 4 subjects and each grade, two topics of 10
+  multiple-choice questions (160 in all). Added and removed from Settings.
+- **H5** Branding: the INTELZA name with the tagline "Understanding Beyond Answers" on the
+  home screen, the presenter screen, PDF reports and Settings → About.
+
 ## Out of scope for 1.0
 Cloud sync, multiple teachers, a head-teacher dashboard, iOS, OMR answer sheets, parent
 reports, a translated interface, and importing questions from CSV.

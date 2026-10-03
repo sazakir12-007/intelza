@@ -41,7 +41,7 @@ fun AnswerBars(
     modifier: Modifier = Modifier,
     noAnswerCount: Int? = null,
 ) {
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
         for (option in options) {
             val count = counts[option] ?: 0
             BarRow(
@@ -74,12 +74,12 @@ private fun BarRow(
     isCorrect: Boolean,
     caption: String? = null,
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         label()
         Box(
             Modifier
                 .weight(1f)
-                .height(28.dp)
+                .height(22.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .background(MaterialTheme.colorScheme.surfaceVariant),
         ) {

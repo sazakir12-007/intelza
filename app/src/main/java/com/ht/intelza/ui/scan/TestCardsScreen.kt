@@ -75,7 +75,7 @@ fun TestCardsScreen(onBack: () -> Unit) {
                     .statusBarsPadding()
                     .padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 FilledTonalIconButton(onClick = onBack) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.back))
@@ -83,7 +83,7 @@ fun TestCardsScreen(onBack: () -> Unit) {
                 Surface(shape = RoundedCornerShape(50), color = Color.Black.copy(alpha = 0.55f)) {
                     Text(
                         stringResource(R.string.test_cards_title),
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                         color = Color.White,
                         style = MaterialTheme.typography.titleMedium,
                     )
@@ -100,7 +100,7 @@ fun TestCardsScreen(onBack: () -> Unit) {
                 Column(
                     Modifier
                         .navigationBarsPadding()
-                        .padding(16.dp),
+                        .padding(12.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     Text(

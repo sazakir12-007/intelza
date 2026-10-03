@@ -15,11 +15,9 @@ import androidx.compose.material.icons.outlined.Insights
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -52,6 +50,8 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import com.ht.intelza.ui.common.AppTopBar
+import com.ht.intelza.ui.common.CompactListItem
 
 class StudentReportViewModel(
     classes: ClassRepository,
@@ -90,7 +90,7 @@ fun StudentReportScreen(onBack: () -> Unit, onOpenSession: (Long) -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            AppTopBar(
                 title = {
                     Column {
                         Text(student?.name.orEmpty())
@@ -115,7 +115,7 @@ fun StudentReportScreen(onBack: () -> Unit, onOpenSession: (Long) -> Unit) {
         val overall = ClassProgress.overallAverage(rows)
         val subjects = ClassProgress.subjectAverages(rows, quickLabel)
         val attended = rows.count { it.present }
-        LazyColumn(Modifier.padding(padding), contentPadding = PaddingValues(bottom = 24.dp)) {
+        LazyColumn(Modifier.padding(padding), contentPadding = PaddingValues(bottom = 16.dp)) {
             if (rows.isEmpty()) {
                 item {
                     EmptyState(
@@ -127,7 +127,7 @@ fun StudentReportScreen(onBack: () -> Unit, onOpenSession: (Long) -> Unit) {
                 return@LazyColumn
             }
             item {
-                Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Row(Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     StatBlock(
                         value = overall?.let(::formatPercent) ?: "–",
                         label = stringResource(R.string.overall_average),
@@ -142,7 +142,7 @@ fun StudentReportScreen(onBack: () -> Unit, onOpenSession: (Long) -> Unit) {
                 }
             }
             item {
-                Column(Modifier.padding(horizontal = 16.dp)) {
+                Column(Modifier.padding(horizontal = 12.dp)) {
                     ScoreTrend(
                         scores = rows.map { row ->
                             if (row.present && row.scoredQuestions > 0) row.correctAnswers.toFloat() / row.scoredQuestions else null
@@ -158,9 +158,9 @@ fun StudentReportScreen(onBack: () -> Unit, onOpenSession: (Long) -> Unit) {
                     Row(
                         Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                            .padding(horizontal = 12.dp, vertical = 6.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         Column(Modifier.weight(1f)) {
                             Text(subject.subject, style = MaterialTheme.typography.bodyLarge)
@@ -177,7 +177,7 @@ fun StudentReportScreen(onBack: () -> Unit, onOpenSession: (Long) -> Unit) {
             }
             item { SectionHeader(stringResource(R.string.history)) }
             items(rows.asReversed(), key = { "session-${it.sessionId}" }) { row ->
-                ListItem(
+                CompactListItem(
                     modifier = Modifier.clickable { onOpenSession(row.sessionId) },
                     headlineContent = { Text(row.title.ifEmpty { quickLabel }) },
                     supportingContent = {
